@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toma de Temperatura Ambiental</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+        }
+        .container {
+            width: 90%;
+            max-width: 18800px;
+            margin: 20px auto;
+            padding: 30px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .logo {
+            width: 150px;
+            height: 60px;
+            background-color: #3c70b4;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .title {
+            text-align: center;
+            flex-grow: 1;
+        }
+        h1 {
+            font-size: 18px;
+            margin: 0;
+        }
+        h2 {
+            font-size: 16px;
+            margin: 5px 0;
+            font-weight: normal;
+        }
+        .page-number {
+            margin-top: 10px;
+            text-align: right;
+        }
+        .info-row {
+            display: flex;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .info-item {
+            margin-right: 15px;
+            margin-bottom: 5px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+            table-layout: fixed;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+        .temp-info {
+            float: right;
+            border-collapse: collapse;
+            width: 180px;
+            margin-bottom: 15px;
+            table-layout: auto;
+        }
+        .days-row td {
+            padding: 5px;
+        }
+        .firma {
+            font-size: 10px;
+            color: blue;
+        }
+        
+        /* Styling for the column headers */
+        th {
+            background-color: #f9f9f9;
+        }
+        
+        /* Equal width for time columns */
+        .time-columns th, .time-columns td {
+            width: calc(100% / 21);
+        }
+        
+        /* First column (temperature/HR) wider */
+        .time-columns th:first-child, .time-columns td:first-child {
+            width: 60px;
+        }
+        
+        /* Day columns */
+        .days-row td {
+            width: calc(100% / 7);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                width: 95%;
+            }
+            
+            table {
+                font-size: 12px;
+            }
+            
+            th, td {
+                padding: 4px;
+            }
+            
+            .info-row {
+                flex-direction: column;
+            }
+            
+            .header {
+                flex-direction: column;
+            }
+            
+            .logo {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <div>
+                    <img src="/api/placeholder/150/60" alt="FARMACIA San José">
+                </div>
+            </div>
+            <div class="title">
+                <h1>TOMA DE TEMPERATURA AMBIENTAL</h1>
+                <h2>SUCURSAL</h2>
+            </div>
+        </div>
+        
+        <div class="page-number">
+            HOJA No. _____________
+        </div>
+
+        <br>
+        
+        <table class="temp-info">
+            <tr>
+                <th>TEMPERATURA</th>
+                <th>MIN</th>
+                <th>MAX</th>
+            </tr>
+            <tr>
+                <td>°C</td>
+                <td>15</td>
+                <td>30</td>
+            </tr>
+            <tr>
+                <td>% HR</td>
+                <td>15</td>
+                <td>65</td>
+            </tr>
+        </table>
+        
+        <div class="info-row">
+            <div class="info-item">INSTRUMENTO DE LECTURA ______________________</div>
+            <div class="info-item">SUPERVISOR _________________________</div>
+        </div>
+        
+        <div class="info-row">
+            <div class="info-item">PERIODO DEL _______ AL _______ DEL MES ___________ DEL AÑO 20________.</div>
+        </div>
+        
+        <table class="time-columns">
+            <tr>
+                <th colspan="22">HORAS DE LECTURA</th>
+            </tr>
+            <tr>
+                <th>°C</th>
+                <th>8</th>
+                <th>15</th>
+                <th>22</th>
+                <th>8</th>
+                <th>15</th>
+                <th>22</th>
+                <th>8</th>
+                <th>15</th>
+                <th>22</th>
+                <th>8</th>
+                <th>15</th>
+                <th>22</th>
+                <th>8</th>
+                <th>15</th>
+                <th>22</th>
+                <th>8</th>
+                <th>15</th>
+                <th>22</th>
+                <th>8</th>
+                <th>15</th>
+                <th>22</th>
+            </tr>
+            <tr><td>35</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>30</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>25</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>20</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>15</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>10</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr class="days-row">
+                <td></td>
+                <td colspan="3">LUNES<br><span class="firma">FIRMA</span></td>
+                <td colspan="3">MARTES<br><span class="firma">FIRMA</span></td>
+                <td colspan="3">MIERCOLES<br><span class="firma">FIRMA</span></td>
+                <td colspan="3">JUEVES<br><span class="firma">FIRMA</span></td>
+                <td colspan="3">VIERNES<br><span class="firma">FIRMA</span></td>
+                <td colspan="3">SABADO<br><span class="firma">FIRMA</span></td>
+                <td colspan="3">DOMINGO<br><span class="firma">FIRMA</span></td>
+            </tr>
+        </table>
+        
+        <table class="time-columns">
+            <tr>
+                <th>% HR</th>
+                <th>8</th>
+                <th>15</th>
+                <th>22</th>
+                <th>8</th>
+                <th>15</th>
+                <th>22</th>
+                <th>8</th>
+                <th>15</th>
+                <th>22</th>
+                <th>8</th>
+                <th>15</th>
+                <th>22</th>
+                <th>8</th>
+                <th>15</th>
+                <th>22</th>
+                <th>8</th>
+                <th>15</th>
+                <th>22</th>
+                <th>8</th>
+                <th>15</th>
+                <th>22</th>
+            </tr>
+            <tr><td>75</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>70</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>65</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>60</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>55</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>50</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>45</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>40</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>35</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>30</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>25</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>20</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>15</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr class="days-row">
+                <td></td>
+                <td colspan="3">LUNES<br><span class="firma">FIRMA</span></td>
+                <td colspan="3">MARTES<br><span class="firma">FIRMA</span></td>
+                <td colspan="3">MIERCOLES<br><span class="firma">FIRMA</span></td>
+                <td colspan="3">JUEVES<br><span class="firma">FIRMA</span></td>
+                <td colspan="3">VIERNES<br><span class="firma">FIRMA</span></td>
+                <td colspan="3">SABADO<br><span class="firma">FIRMA</span></td>
+                <td colspan="3">DOMINGO<br><span class="firma">FIRMA</span></td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
