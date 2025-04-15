@@ -146,8 +146,8 @@ router.post('/readings', async (req, res) => {
   };
 
   // Solo guardar si es 8:00, 15:00 o 22:00 (±1 minuto)
-  const shouldSave = ([8, 15, 22].includes(hour) && minute === 0);
-  //const shouldSave = (minute %2 === 0)
+  //const shouldSave = ([8, 15, 22].includes(hour) && minute === 0);
+  const shouldSave = (minute %2 === 0)
 
   if (!shouldSave) {
     return res.status(200).json({ message: 'Lectura recibida en tiempo real (no guardada)', realtime: true });
