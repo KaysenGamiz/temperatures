@@ -1,16 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const Reading = require('../models/model_reading'); // Asegúrate que la ruta sea correcta
+const Reading = require('../models/model_reading');
 
 // Última lectura temporal (almacenada en memoria)
 let latestLiveReading = null;
+process.env.TZ = 'America/Los_Angeles'; // Pacific Time
 
 // Ruta para obtener lecturas filtradas por semana
 router.get('/readings', async (req, res) => {
   try {
     const { year, month, week } = req.query;
     
-    // Verificar que todos los parámetros requeridos estén presentes
     if (!year || !month || !week) {
       return res.status(400).json({ error: 'Se requieren los parámetros year, month y week' });
     }
@@ -58,37 +58,28 @@ router.get('/readings', async (req, res) => {
   }
 });
 
-// Función para calcular los días de inicio y fin de una semana específica
+// Función corregida para calcular los días de inicio y fin de una semana específica
 function calculateWeekDays(year, month, weekNumber) {
   // El primer día del mes
   const firstDay = new Date(year, month - 1, 1);
   
-  // Día de la semana del primer día (0: domingo, 1: lunes, ..., 6: sábado)
-  let firstDayOfWeek = firstDay.getDay();
-  // Ajustar para que la semana comience en lunes (1: lunes, ..., 7: domingo)
-  firstDayOfWeek = firstDayOfWeek === 0 ? 7 : firstDayOfWeek;
-  
-  // Calcular el primer día de la primera semana
-  // Si el mes comienza en lunes, el primer día es 1
-  // Si comienza otro día, calculamos cuántos días faltan para completar la semana
-  const daysToFirstMonday = (8 - firstDayOfWeek) % 7;
-  
-  // Día de inicio para la semana solicitada
-  const startDay = 1 + daysToFirstMonday + (weekNumber - 1) * 7;
-  
-  // Día de fin para la semana solicitada (6 días después del inicio)
-  let endDay = startDay + 6;
-  
-  // Verificar que no exceda el número de días del mes
-  const lastDayOfMonth = new Date(year, month, 0).getDate();
-  if (endDay > lastDayOfMonth) {
-    endDay = lastDayOfMonth;
+  if (weekNumber === 1) {
+    const startDay = 1;
+    
+    const lastDayOfMonth = new Date(year, month, 0).getDate();
+    const endDay = Math.min(7, lastDayOfMonth);
+    
+    return { startDay, endDay };
+  } else {
+    const startDay = (weekNumber - 1) * 7 + 1;
+    
+    const lastDayOfMonth = new Date(year, month, 0).getDate();
+    const endDay = Math.min(startDay + 6, lastDayOfMonth);
+    
+    return { startDay, endDay };
   }
-  
-  return { startDay, endDay };
 }
 
-// Ruta para obtener todos los dispositivos únicos
 router.get('/devices', async (req, res) => {
   try {
     const devices = await Reading.distinct('device_id');
@@ -99,7 +90,6 @@ router.get('/devices', async (req, res) => {
   }
 });
 
-// Ruta para obtener el resumen de estadísticas por dispositivo
 router.get('/devices/stats', async (req, res) => {
   try {
     const stats = await Reading.aggregate([
@@ -157,6 +147,7 @@ router.post('/readings', async (req, res) => {
 
   // Solo guardar si es 8:00, 15:00 o 22:00 (±1 minuto)
   const shouldSave = ([8, 15, 22].includes(hour) && minute === 0);
+  //const shouldSave = (minute %2 === 0)
 
   if (!shouldSave) {
     return res.status(200).json({ message: 'Lectura recibida en tiempo real (no guardada)', realtime: true });
@@ -232,17 +223,5 @@ router.get('/report', async (req, res) => {
     res.status(500).send('Error generando el reporte');
   }
 });
-
-function calculateWeekDays(year, month, weekNumber) {
-  const firstDay = new Date(year, month - 1, 1);
-  let firstDayOfWeek = firstDay.getDay();
-  firstDayOfWeek = firstDayOfWeek === 0 ? 7 : firstDayOfWeek;
-  const daysToFirstMonday = (8 - firstDayOfWeek) % 7;
-  const startDay = 1 + daysToFirstMonday + (weekNumber - 1) * 7;
-  let endDay = startDay + 6;
-  const lastDayOfMonth = new Date(year, month, 0).getDate();
-  if (endDay > lastDayOfMonth) endDay = lastDayOfMonth;
-  return { startDay, endDay };
-}
 
 module.exports = router;
