@@ -25,22 +25,26 @@
         }
         .header {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-start; /* Cambiado de space-between */
             align-items: center;
             margin-bottom: 20px;
         }
+
         .logo {
             width: 150px;
             height: 60px;
-            background-color: #3c70b4;
-            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding-left: 20px; /* Usar padding en lugar de margin */
+            flex-shrink: 0; /* Evita que el logo se encoja */
+            margin-left: 1.47%;
         }
+
         .title {
             text-align: center;
             flex-grow: 1;
+            margin-right: 150px; /* Compensar el espacio del logo para centrar el título */
         }
         h1 {
             font-size: 18px;
@@ -119,6 +123,20 @@
             display: inline-block;
         }
         
+        @media print and (orientation: portrait) {
+        
+          .title {
+            text-align: center;
+            flex-grow: 1;
+            margin-right: 0; /* Eliminar margen derecho */
+          }
+        }
+        @media print and (orientation: landscape) {
+          .time-columns:nth-of-type(3) { 
+            page-break-before: always;    
+            margin-top: 150px;               
+          }
+        }
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .container {
@@ -153,7 +171,7 @@
         <div class="header">
             <div class="logo">
                 <div>
-                    <img src="/api/placeholder/150/60" alt="FARMACIA San José">
+                    <img src="/images/logoBotica.jpg">
                 </div>
             </div>
             <div class="title">
