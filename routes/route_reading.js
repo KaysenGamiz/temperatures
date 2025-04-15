@@ -156,9 +156,7 @@ router.post('/readings', async (req, res) => {
   };
 
   // Solo guardar si es 8:00, 15:00 o 22:00 (±1 minuto)
-  // const shouldSave = ([8, 15, 22].includes(hour) && minute === 0);
-
-  const shouldSave = (minute % 2 === 0);
+  const shouldSave = ([8, 15, 22].includes(hour) && minute === 0);
 
   if (!shouldSave) {
     return res.status(200).json({ message: 'Lectura recibida en tiempo real (no guardada)', realtime: true });
@@ -182,5 +180,69 @@ router.get('/readings/live', (req, res) => {
   res.json({ reading: latestLiveReading });
 });
 
+router.get('/report', async (req, res) => {
+  const { year, month, week } = req.query;
+
+  if (!year || !month || !week) {
+    return res.status(400).send('Faltan parámetros');
+  }
+
+  const yearNum = parseInt(year);
+  const monthNum = parseInt(month);
+  const weekNum = parseInt(week);
+
+  const { startDay, endDay } = calculateWeekDays(yearNum, monthNum, weekNum);
+
+  const query = {
+    year: yearNum,
+    month: monthNum,
+    day: { $gte: startDay, $lte: endDay }
+  };
+
+  try {
+    const readings = await Reading.find(query).sort({ timestamp: 1 });
+
+    // Crear una estructura por día y hora
+    const reportData = {};
+    for (let i = startDay; i <= endDay; i++) {
+      reportData[i] = { 8: null, 15: null, 22: null };
+    }
+
+    for (const r of readings) {
+      const day = r.day;
+      const hour = r.hour;
+      if ([8, 15, 22].includes(hour) && reportData[day]) {
+        reportData[day][hour] = {
+          temp: r.temperature,
+          hum: r.humidity
+        };
+      }
+    }
+
+    res.render('temperatures/report', {
+      year: yearNum,
+      month: monthNum,
+      week: weekNum,
+      startDay,
+      endDay,
+      reportData
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error generando el reporte');
+  }
+});
+
+function calculateWeekDays(year, month, weekNumber) {
+  const firstDay = new Date(year, month - 1, 1);
+  let firstDayOfWeek = firstDay.getDay();
+  firstDayOfWeek = firstDayOfWeek === 0 ? 7 : firstDayOfWeek;
+  const daysToFirstMonday = (8 - firstDayOfWeek) % 7;
+  const startDay = 1 + daysToFirstMonday + (weekNumber - 1) * 7;
+  let endDay = startDay + 6;
+  const lastDayOfMonth = new Date(year, month, 0).getDate();
+  if (endDay > lastDayOfMonth) endDay = lastDayOfMonth;
+  return { startDay, endDay };
+}
 
 module.exports = router;
